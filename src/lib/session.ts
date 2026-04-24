@@ -6,8 +6,15 @@ export interface SessionData {
   email?: string;
 }
 
+if (!process.env.SESSION_SECRET) {
+  throw new Error("Missing env var: SESSION_SECRET");
+}
+if (!process.env.DATABASE_URL) {
+  throw new Error("Missing env var: DATABASE_URL");
+}
+
 const sessionOptions = {
-  password: process.env.SESSION_SECRET as string,
+  password: process.env.SESSION_SECRET,
   cookieName: "gymos_session",
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
