@@ -34,13 +34,14 @@ function daysFromNow(days: number): Date {
 }
 
 async function main() {
-  console.log("🌱 Seeding database...");
+  // Skip seeding if data already exists
+  const existingPlans = await prisma.membershipPlan.count();
+  if (existingPlans > 0) {
+    console.log("Database already seeded, skipping.");
+    return;
+  }
 
-  // Clear existing data
-  await prisma.attendance.deleteMany();
-  await prisma.payment.deleteMany();
-  await prisma.member.deleteMany();
-  await prisma.membershipPlan.deleteMany();
+  console.log("🌱 Seeding database...");
 
   // Plans
   const plans = await Promise.all([
